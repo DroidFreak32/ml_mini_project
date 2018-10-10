@@ -109,6 +109,8 @@ print("Predicted values: \n",y_pred)
 y_compare = np.vstack((y_test,y_pred)).T
 
 # Actual value on the left side and predicted value on the right hand side
+print ("\n\nSide-by-side comparison of Actual vs Predicted values")
+print ("-----------------------------------------------------")
 print(y_compare[:,:])
 
 # Making the Confusion Matrix
@@ -126,6 +128,6 @@ for row in range(a[0]):
         else:
             falsePred += cm[row,c]
 
-print('Correct predictions: ', corrPred)
+print('\nCorrect predictions: ', corrPred)
 print('False predictions', falsePred)
 print ('\n\nAccuracy of the Bayesian Classification is: ', corrPred/(cm.sum())*100, '%')

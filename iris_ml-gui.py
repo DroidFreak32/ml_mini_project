@@ -95,9 +95,19 @@ y = dataset['species'].values
 # Splitting the dataset into the Training set and Test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 82)
 
-# Feature Scaling to bring the variable in a single scale
+'''
+This function transforms the data such that its distribution will have a mean value 0 and standard deviation of 1.
+Here each value in the dataset will have the mean value subtracted, 
+and then divided by the standard deviation of the whole dataset.
+
+x′=(x−μ)/σ
+
+fit() calculates μ and σ
+fit_transform() calls fit() and transform() internally.
+
+'''
 sc = StandardScaler()
-X_train = sc.fit_transform(X_train)
+X_train = sc.fit_transform(X_train) # Now sc is fitted, so just use sc.transform(test_data) from now on.
 X_test = sc.transform(X_test)
 
 # Fitting Naive Bayes Classification to the Training set with linear kernel
@@ -105,6 +115,7 @@ nvclassifier = GaussianNB().fit(X_train, y_train)
 
 # Predicting the Test set results. (0 = setosa, 1 = versicolor, 2 = virginica)
 predictions = nvclassifier.predict(X_test)
+print(X_test)
 
 # Assigning flower class based on the prediction results.
 y_pred = []

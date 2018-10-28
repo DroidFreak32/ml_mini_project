@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+import cgitb, cgi
+import mysql.connector 
 import numpy as np
 import pandas as pd
-import cgitb, cgi
 import tkinter
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
@@ -86,10 +87,14 @@ class GaussianNB(object):
         return np.argmax(self.predict_log_proba(X), axis=1)
 
 # Importing the dataset
-dataset = pd.read_csv('iris_uci.csv')
+# dataset = pd.read_csv('iris_uci.csv')
+mydb=mysql.connector.connect(host="localhost",user="root",passwd="root",database="iris_dataset")
+mycursor=mydb.cursor()
+sql="SELECT * FROM Iris"
+dataset=pd.read_sql(sql,mydb)
 
 # Spliting the dataset into independent and dependent variables
-X = dataset.iloc[:,:4].values
+X = dataset.iloc[:,1:5].values
 y = dataset['species'].values
 
 # Splitting the dataset into the Training set and Test set

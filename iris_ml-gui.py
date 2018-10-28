@@ -1,9 +1,24 @@
+#!/usr/bin/env python3
 import numpy as np
 import pandas as pd
+import cgitb, cgi
+import tkinter
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
+# GUI Initialization
+predict_window = tkinter.Tk()
+predict_window.title("Python Project")
+iris_color = '#43348c'
+
+# GUI - User-entered values
+sepal_length = tkinter.DoubleVar()
+sepal_width = tkinter.DoubleVar()
+petal_length = tkinter.DoubleVar()
+petal_width = tkinter.DoubleVar()
+
+# Naive Bayes algorithm
 class GaussianNB(object):
     def __init__(self):
         pass
@@ -131,3 +146,58 @@ for row in range(a[0]):
 print('\nCorrect predictions: ', corrPred)
 print('False predictions', falsePred)
 print ('\n\nAccuracy of the Bayesian Classification is: ', corrPred/(cm.sum())*100, '%')
+
+
+# GUI - Prediction
+def predict():
+    print("The entries are ",sepal_length.get()," ",sepal_width.get()," ",petal_length.get()," ",petal_width.get(),"\n\n")
+    test = np.array([[sepal_length.get(), sepal_width.get(), petal_length.get(), petal_width.get()]])
+    test=sc.transform(test)
+    prediction = nvclassifier.predict(test)
+    if prediction[0] == 0:
+        l_prediction = tkinter.Label(predict_window, text="The flower is Iris-setosa", fg=iris_color)
+        l_prediction.grid(row=6)
+    elif prediction[0] == 1:
+        l_prediction = tkinter.Label(predict_window, text="The flower is Iris-versicolor", fg=iris_color)
+        l_prediction.grid(row=6)
+    else:
+        l_prediction = tkinter.Label(predict_window, text="The flower is Iris-virginica", fg=iris_color)
+        l_prediction.grid(row=6)
+
+def prediction_window():
+
+    # GUI - Elements
+
+    l_input_desc = tkinter.Label(predict_window, text="Enter the following parameters of iris flower:")
+    l_input_sepal_length = tkinter.Label(predict_window, text="Sepal Length:")
+    entry_sepal_length = tkinter.Entry(predict_window, textvariable=sepal_length)
+
+    l_input_sepal_width = tkinter.Label(predict_window, text="Sepal Width:")
+    entry_sepal_width = tkinter.Entry(predict_window, textvariable=sepal_width)
+
+    l_input_petal_length = tkinter.Label(predict_window, text="Petal Length:")
+    entry_petal_length = tkinter.Entry(predict_window, textvariable=petal_length)
+
+    l_input_petal_width = tkinter.Label(predict_window, text="Petal Width:")
+    entry_petal_width = tkinter.Entry(predict_window, textvariable=petal_width)
+
+    button= tkinter.Button(predict_window, text ="Predict!", bd=5, bg="yellow", fg="red", font=20, justify="center", height=3, command=predict)
+    l_input_desc.grid(row=0,column=0)
+
+    l_input_sepal_length.grid(row=1,column=0)
+    entry_sepal_length.grid(row=1,column=1)
+    l_input_sepal_width.grid(row=2,column=0)
+    entry_sepal_width.grid(row=2,column=1)
+    l_input_petal_length.grid(row=3,column=0)
+    entry_petal_length.grid(row=3,column=1)
+    l_input_petal_width.grid(row=4,column=0)
+    entry_petal_width.grid(row=4,column=1)
+
+    button.grid(row=5,column=0,columnspan=2)
+
+    predict_window.mainloop()
+
+prediction_window()
+
+# def home_page():
+# home_page()

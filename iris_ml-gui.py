@@ -2,14 +2,17 @@
 import mysql.connector
 import numpy as np
 import pandas as pd
+from tkinter import *
+from PIL import ImageTk, Image
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from tkinter import *
+
+global predict_window
 
 # GUI Initialization
-predict_window = Tk()
-predict_window.title("Python Project")
+home_screen = Tk()
+home_screen.title("Python Project")
 iris_color = '#43348c'
 
 # GUI - User-entered values
@@ -169,9 +172,31 @@ print('False predictions', falsePred)
 print('\n\nAccuracy of the Bayesian Classification is: ',
       corrPred / (cm.sum()) * 100, '%')
 
+# GUI - Show flower window
+def show_flower(flower):
+    flower_window = Toplevel(home_screen)
+    flower_window.title("Predicted Flower")
+    flower_canvas = Canvas(flower_window, width=300, height=300)
+    flower_canvas.pack()
+    if flower == 0:
+        img = ImageTk.PhotoImage(Image.open("iris_setosa.jpg"))
+        l_flower = Label(flower_window, text="The flower is Iris - Setosa")
+        l_flower.config(font=("Ubuntu Mono", 13))
+    elif flower == 1:
+        img = ImageTk.PhotoImage(Image.open("iris_versicolor.jpg"))
+        l_flower = Label(flower_window, text="The flower is Iris - Versicolor")
+        l_flower.config(font=("Ubuntu Mono", 13))
+    else:
+        img = ImageTk.PhotoImage(Image.open("iris_virginica.jpg"))
+        l_flower = Label(flower_window, text="The flower is Iris - Virginica")
+        l_flower.config(font=("Ubuntu Mono", 13))
+    l_flower.pack()
+    flower_canvas.create_image(0, 0, anchor=NW, image=img)
+    flower_window.mainloop()
 
 # GUI - Prediction
 def predict():
+
     print("The entries are ", sepal_length.get(), " ", sepal_width.get(),
           " ", petal_length.get(), " ", petal_width.get(), "\n\n")
     test = np.array([[sepal_length.get(), sepal_width.get(),
@@ -179,41 +204,39 @@ def predict():
     test = sc.transform(test)
     prediction = nvclassifier.predict(test)
     if prediction[0] == 0:
-        l_prediction = Label(
-            predict_window, text="The flower is Iris-setosa", fg=iris_color)
-        l_prediction.grid(row=6)
+        show_flower(0)
     elif prediction[0] == 1:
-        l_prediction = Label(
-            predict_window, text="The flower is Iris-versicolor", fg=iris_color)
-        l_prediction.grid(row=6)
+        show_flower(1)
     else:
-        l_prediction = Label(
-            predict_window, text="The flower is Iris-virginica", fg=iris_color)
-        l_prediction.grid(row=6)
+        show_flower(2)
 
 
 def prediction_window():
-
-    # GUI - Elements
+    predict_window = Toplevel(home_screen)
+    predict_window.title("Predict Flower")
 
     l_input_desc = Label(
-        predict_window, text="Enter the following parameters of iris flower:")
+        predict_window, text="Enter the following parameters of iris flower:", font=("Ubuntu Mono", 13))
     l_input_sepal_length = Label(predict_window, text="Sepal Length:")
+    l_input_sepal_length.config(font=("Ubuntu Mono", 13))
     entry_sepal_length = Entry(
         predict_window, textvariable=sepal_length)
 
     l_input_sepal_width = Label(predict_window, text="Sepal Width:")
+    l_input_sepal_width.config(font=("Ubuntu Mono", 13))
     entry_sepal_width = Entry(predict_window, textvariable=sepal_width)
 
     l_input_petal_length = Label(predict_window, text="Petal Length:")
+    l_input_petal_length.config(font=("Ubuntu Mono", 13))
     entry_petal_length = Entry(
         predict_window, textvariable=petal_length)
 
     l_input_petal_width = Label(predict_window, text="Petal Width:")
+    l_input_petal_width.config(font=("Ubuntu Mono", 13))
     entry_petal_width = Entry(predict_window, textvariable=petal_width)
 
-    button = Button(predict_window, text="Predict!", bd=5, bg="yellow",
-                            fg="red", font=20, justify="center", height=3, command=predict)
+    predict_button = Button(predict_window, text="Predict!",
+                            bd=1, font=20, justify="center", height=1, command=predict)
     l_input_desc.grid(row=0, column=0)
 
     l_input_sepal_length.grid(row=1, column=0)
@@ -225,12 +248,140 @@ def prediction_window():
     l_input_petal_width.grid(row=4, column=0)
     entry_petal_width.grid(row=4, column=1)
 
-    button.grid(row=5, column=0, columnspan=2)
+    predict_button.grid(row=5, column=0, columnspan=2)
 
     predict_window.mainloop()
 
 
-prediction_window()
+def home_page():
+    title = Label(
+        home_screen, text="Hello! Welcome to Iris flower predictor!", height=5)
+    title.config(font=("Ubuntu Mono", 16))
+    about_iris_button = Button(home_screen, text="About Iris flowers", bd=1, font=20, justify="center", height=1,
+                               command=about_iris_flower)
+    about_iris_button.config(font=("Ubuntu Mono", 13))
+    predict_window_button = Button(home_screen, text="Predict the flowers!", bd=1, font=20, justify="center", height=1,
+                                   command=prediction_window)
+    predict_window_button.config(font=("Ubuntu Mono", 13))
+    about_team_button = Button(home_screen, text="About Team", bd=1, font=20, justify="center", height=1,
+                               command=about_team)
+    about_team_button.config(font=("Ubuntu Mono", 13))
 
-# def home_page():
-# home_page()
+    canvas = Canvas(home_screen, width=300, height=300)
+    canvas.grid(row=1, column=0)
+    img = ImageTk.PhotoImage(Image.open("about_iris.jpg"))
+    canvas.create_image(0, 0, anchor=NW, image=img)
+    canvas2 = Canvas(home_screen, width=300, height=300)
+    canvas2.grid(row=1, column=1)
+    img2 = ImageTk.PhotoImage(Image.open("predict.jpg"))
+    canvas2.create_image(0, 0, anchor=NW, image=img2)
+    canvas3 = Canvas(home_screen, width=300, height=300)
+    canvas3.grid(row=1, column=2)
+    img3 = ImageTk.PhotoImage(Image.open("about_team.jpg"))
+    canvas3.create_image(0, 0, anchor=NW, image=img3)
+
+    title.grid(row=0, columnspan=3)
+    about_iris_button.grid(row=2)
+    predict_window_button.grid(row=2, column=1)
+    about_team_button.grid(row=2, column=2)
+    home_screen.mainloop()
+
+
+def about_iris_flower():
+    about_iris_window = Toplevel(home_screen)
+    about_iris_window.title("About Iris Flowers")
+
+    iris_desc = "Iris is a genus of 260–300 species of flowering plants with showy flowers.\n\nIt takes its name from the Greek word for a rainbow, which is also the name\nfor the Greek goddess of the rainbow, Iris.\n\nSome authors state that the name refers to the wide variety of flower colors\nfound among the many species.\n\nAs well as being the scientific name, iris is also widely used as a common name for all Iris species,\nas well as some belonging to other closely related genera.\n"
+    iris_desc += "\nWe will be looking at the following three classes of Iris flower:\n"
+    iris_desc += "------------------------------------------------------------------\n"
+    title = Label(about_iris_window, text=iris_desc,
+                  justify="left", font=("Ubuntu Mono", 13))
+    title.grid(row=0, columnspan=3)
+
+    setosa_head = "1) Iris Setosa:\n"
+    setosa_head += "--------------\n"
+    l_setosa = Label(about_iris_window, text=setosa_head,
+                     anchor=W, justify="left", font=("Ubuntu Mono", 13))
+    l_setosa.grid(row=2)
+
+    canvas = Canvas(about_iris_window, width=300, height=300)
+    canvas.grid(row=3, column=0)
+    img = ImageTk.PhotoImage(Image.open("iris_setosa.jpg"))
+    canvas.create_image(0, 0, anchor=NW, image=img)
+
+    versicolor_head = "2) Iris Versicolor:\n"
+    versicolor_head += "--------------\n"
+    l_setosa = Label(about_iris_window, text=versicolor_head,
+                     anchor=W, justify="left", font=("Ubuntu Mono", 13))
+    l_setosa.grid(row=2, column=1)
+
+    canvas2 = Canvas(about_iris_window, width=300, height=300)
+    canvas2.grid(row=3, column=1)
+    img2 = ImageTk.PhotoImage(Image.open("iris_versicolor.jpg"))
+    canvas2.create_image(0, 0, anchor=NW, image=img2)
+
+    virginica_head = "2) Iris Virginica:\n"
+    virginica_head += "--------------\n"
+    l_setosa = Label(about_iris_window, text=virginica_head,
+                     anchor=W, justify="left", font=("Ubuntu Mono", 13))
+    l_setosa.grid(row=2, column=2)
+
+    canvas3 = Canvas(about_iris_window, width=300, height=300)
+    canvas3.grid(row=3, column=2)
+    img3 = ImageTk.PhotoImage(Image.open("iris_virginica.jpg"))
+    canvas3.create_image(0, 0, anchor=NW, image=img3)
+
+    about_iris_window.mainloop()
+
+
+def about_team():
+    about_team_window = Toplevel(home_screen)
+    about_team_window.title("About the Team")
+
+    team_name_1 = "Safa Suleman Shaikh"
+    team_USN_1 = "USN:           4NM15CS144"
+
+    team_name_2 = "Rushab Shah"
+    team_USN_2 = "USN:           4NM15CS141"
+
+    team_semester = "Semester:      7th"
+    team_section = "Section:       C"
+    team_dept = "Department:    Computer Science and Engineering"
+
+    l_name_1 = Label(about_team_window, text=team_name_1,
+                     anchor='w', width=50, font=("Ubuntu Mono", 15))
+    l_usn_1 = Label(about_team_window, text=team_USN_1,
+                    anchor='w', width=50, font=("Ubuntu Mono", 13))
+    l_semester_1 = Label(about_team_window, text=team_semester,
+                         anchor='w', width=50, font=("Ubuntu Mono", 13))
+    l_section_1 = Label(about_team_window, text=team_section,
+                        anchor='w', width=50, font=("Ubuntu Mono", 13))
+    l_dept_1 = Label(about_team_window, text=team_dept,
+                     anchor='w', width=50, font=("Ubuntu Mono", 13))
+
+    l_name_2 = Label(about_team_window, text="\n"+team_name_2,
+                     anchor='w', width=50, font=("Ubuntu Mono", 15))
+    l_usn_2 = Label(about_team_window, text=team_USN_2,
+                    anchor='w', width=50, font=("Ubuntu Mono", 13))
+    l_semester_2 = Label(about_team_window, text=team_semester,
+                         anchor='w', width=50, font=("Ubuntu Mono", 13))
+    l_section_2 = Label(about_team_window, text=team_section,
+                        anchor='w', width=50, font=("Ubuntu Mono", 13))
+    l_dept_2 = Label(about_team_window, text=team_dept,
+                     anchor='w', width=50, font=("Ubuntu Mono", 13))
+
+    l_name_1.grid(row=0, columnspan=2)
+    l_usn_1.grid(row=1, columnspan=2)
+    l_semester_1.grid(row=2, columnspan=2)
+    l_section_1.grid(row=3, columnspan=2)
+    l_dept_1.grid(row=4, columnspan=2)
+    l_name_2.grid(row=6, columnspan=2)
+    l_usn_2.grid(row=7, columnspan=2)
+    l_semester_2.grid(row=8, columnspan=2)
+    l_section_2.grid(row=9, columnspan=2)
+    l_dept_2.grid(row=10, columnspan=2)
+
+    about_team_window.mainloop()
+
+
+home_page()

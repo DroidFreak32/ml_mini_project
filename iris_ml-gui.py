@@ -236,7 +236,7 @@ def prediction_window():
     entry_petal_width = Entry(predict_window, textvariable=petal_width)
 
     predict_button = Button(predict_window, text="Predict!",
-                            bd=1, font=20, justify="center", height=1, command=predict)
+                            bd=0, font=20, justify="center", height=1, activebackground="#cc575d", command=predict)
     l_input_desc.grid(row=0, column=0)
 
     l_input_sepal_length.grid(row=1, column=0)
@@ -257,14 +257,14 @@ def home_page():
     title = Label(
         home_screen, text="Hello! Welcome to Iris flower predictor!", height=5)
     title.config(font=("Ubuntu Mono", 16))
-    about_iris_button = Button(home_screen, text="About Iris flowers", bd=1, font=20, justify="center", height=1,
-                               command=about_iris_flower)
+    about_iris_button = Button(home_screen, text="About Iris flowers", bd=0, font=20, justify="center", height=1,
+                               command=about_iris_flower, activebackground="#cc575d")
     about_iris_button.config(font=("Ubuntu Mono", 13))
-    predict_window_button = Button(home_screen, text="Predict the flowers!", bd=1, font=20, justify="center", height=1,
-                                   command=prediction_window)
+    predict_window_button = Button(home_screen, text="Predict the flowers!", bd=0, font=20, justify="center", height=1,
+                                   command=prediction_window, activebackground="#cc575d")
     predict_window_button.config(font=("Ubuntu Mono", 13))
-    about_team_button = Button(home_screen, text="About Team", bd=1, font=20, justify="center", height=1,
-                               command=about_team)
+    about_team_button = Button(home_screen, text="About Team", bd=0, font=20, justify="center", height=1,
+                               command=about_team, activebackground="#cc575d")
     about_team_button.config(font=("Ubuntu Mono", 13))
 
     canvas = Canvas(home_screen, width=300, height=300)
